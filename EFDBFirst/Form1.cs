@@ -63,7 +63,7 @@ namespace EFDBFirst
                          };
             //dgvTest.DataSource = sorgu4.ToList();
 
-            this.Text = $"{db.Products.Average(x=>x.UnitPrice):c2}";
+            //this.Text = $"{db.Products.Average(x=>x.UnitPrice):c2}";
 
             var sorgu5 = db.Products
                 .Where(x => x.UnitPrice >= db.Products.Average(y => y.UnitPrice))
@@ -88,7 +88,78 @@ namespace EFDBFirst
                          };
             //dgvTest.DataSource = sorgu6.ToList();
 
+            // hangi kategoriden kac tane urunum var
 
+            var sorgu7 = db.Products
+                .Where(x => x.CategoryID.HasValue)
+                .GroupBy(x => new { x.Category.CategoryName, x.Supplier.CompanyName })//x.Category.CategoryName)
+                .Select(x => new
+                {
+                    Kategori = x.Key.CategoryName,
+                    Company = x.Key.CompanyName,
+                    Total = x.Count()
+                })
+                .OrderByDescending(x=>x.Kategori)
+                .ThenBy(x=>x.Company)
+                .ToList();
+            //gvTest.DataSource = sorgu7;
+
+            var sorgu8 = from product in db.Products
+                         join category in db.Categories on product.CategoryID equals category.CategoryID
+                         join supp in db.Suppliers on product.SupplierID equals supp.SupplierID
+                         group new
+                         {
+                             category,
+                             supp
+                         }
+                         by new
+                         {
+                             category.CategoryName,
+                             supp.CompanyName
+                         } into gp
+                         orderby gp.Key.CategoryName ascending,gp.Key.CompanyName descending
+                         select new
+                         {
+                             CategoryName = gp.Key.CategoryName,
+                             CompanyName = gp.Key.CompanyName,
+                             Total = gp.Count()
+                         };
+            //dgvTest.DataSource = sorgu8.ToList();
+
+            //hangi urunumden ne kadarlik siparis verildi
+
+            var sorgu9 = db.Order_Details
+                .Join(db.Products,
+                od => od.ProductID,
+                Product => Product.ProductID,
+                (od, product) => new { od, product })
+                .GroupBy(x => x.product.ProductName)
+                .OrderBy(x => x.Key)
+                .Select(x => new
+                {
+                    x.Key,
+                    Total = x.Sum(y => y.od.UnitPrice * y.od.Quantity)
+                });
+            //dgvTest.DataSource = sorgu9.ToList();
+
+            var sorgu10 = from prod in db.Products
+                          join od in db.Order_Details on prod.ProductID equals od.ProductID
+                          group new
+                          {
+                              prod,
+                              od
+                          }
+                          by new
+                          {
+                              prod.ProductName
+                          } into gp
+                          orderby gp.Key.ProductName
+                          select new
+                          {
+                              gp.Key.ProductName,
+                              Total = gp.Sum(x => x.od.UnitPrice * x.od.Quantity)
+                          };
+           // dgvTest.DataSource = sorgu10.ToList();
         }
     }
 }
