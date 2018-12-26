@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.Entity.Infrastructure;
 using System.Data.Entity.Validation;
 using System.Drawing;
 using System.Linq;
@@ -29,7 +30,8 @@ namespace EF_TemelCrudIslemleri
             NorthwindsabahEntities db = new NorthwindsabahEntities();
             var kategoriler1 = db.Categories
                 .OrderBy(x => x.CategoryName)
-                .Select(x => new CategoryViewModel() {
+                .Select(x => new CategoryViewModel()
+                {
                     CategoryID = x.CategoryID,
                     CategoryName = x.CategoryName,
                     ProductCount = x.Products.Count
@@ -46,7 +48,7 @@ namespace EF_TemelCrudIslemleri
                 .ToList();
             cmbUrunKategori.DataSource = kategoriler2;
             cmbKategori.DataSource = kategoriler1;
-            
+
             //cmbKategori.DisplayMember = "CategoryName";
             //cmbKategori.ValueMember = "CategoryID";    tostringi ezince gerek kalmadı
         }
@@ -59,24 +61,24 @@ namespace EF_TemelCrudIslemleri
                 NorthwindsabahEntities db = new NorthwindsabahEntities();
                 db.Categories.Add(new Category()
                 {
-                    CategoryName = string.IsNullOrEmpty(txtKategoriAdi.Text)?null: txtKategoriAdi.Text, //boş kaydetmesin diye
+                    CategoryName = string.IsNullOrEmpty(txtKategoriAdi.Text) ? null : txtKategoriAdi.Text, //boş kaydetmesin diye
                     Description = txtAciklama.Text
                 });
                 int sonuc = db.SaveChanges();
                 MessageBox.Show($"{sonuc} kayit eklendi");
                 KategorileriGetir();
             }
-            catch(DbEntityValidationException ex)
+            catch (DbEntityValidationException ex)
             {
                 foreach (var validationError in ex.EntityValidationErrors)
                 {
                     foreach (var error in validationError.ValidationErrors)
                     {
                         if (error.PropertyName == "CategoryName")
-                            ep1.SetError(txtKategoriAdi,error.ErrorMessage);
+                            ep1.SetError(txtKategoriAdi, error.ErrorMessage);
                     }
                 }
-                MessageBox.Show(EntityHelper.ValidationMessage(ex),"Bir hata olustu",MessageBoxButtons.OK,MessageBoxIcon.Error);
+                MessageBox.Show(EntityHelper.ValidationMessage(ex), "Bir hata olustu", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             catch (Exception ex)
             {
@@ -110,7 +112,7 @@ namespace EF_TemelCrudIslemleri
             lstUrunler.DataSource = sorgu;
             gbUrun.Visible = sorgu.Count > 0;
 
-            
+
         }
 
         private void lstUrunler_SelectedIndexChanged(object sender, EventArgs e)
@@ -128,7 +130,7 @@ namespace EF_TemelCrudIslemleri
             var uruncatlist = cmbUrunKategori.DataSource as List<CategoryViewModel>;
             foreach (var item in uruncatlist)
             {
-                if (item.CategoryID==urun.CategoryID)
+                if (item.CategoryID == urun.CategoryID)
                 {
                     cmbUrunKategori.SelectedItem = item;
                     break;
@@ -151,7 +153,7 @@ namespace EF_TemelCrudIslemleri
                 KategorileriGetir();
                 MessageBox.Show($"{sonuc} urun guncellendi");
             }
-            catch(DbEntityValidationException ex)
+            catch (DbEntityValidationException ex)
             {
                 foreach (var validationError in ex.EntityValidationErrors)
                 {
@@ -163,6 +165,32 @@ namespace EF_TemelCrudIslemleri
                         MessageBox.Show(EntityHelper.ValidationMessage(ex), "Bir hata olustu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void silToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (lstUrunler.SelectedItem == null) return;
+
+            var urunID = (lstUrunler.SelectedItem as ProductViewModel).ProductID;
+            var cevap = MessageBox.Show("secili ürünü silmek istiyor musunuz ?", "Urun Silme", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (cevap != DialogResult.Yes) return;
+
+            try
+            {
+                NorthwindsabahEntities db = new NorthwindsabahEntities();
+                var urun = db.Products.Find(urunID);
+                db.Products.Remove(urun);
+                MessageBox.Show($"{db.SaveChanges()} kayit silindi");
+                KategorileriGetir();
+            }
+            catch(DbUpdateException ex)
+            {
+                MessageBox.Show("silmek istediğiniz akyit baska tabloda kullanildigi icin silemezsiniz");
             }
             catch (Exception ex)
             {
