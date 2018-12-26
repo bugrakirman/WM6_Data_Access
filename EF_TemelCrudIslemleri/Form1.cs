@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EF_TemelCrudIslemleri.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,9 +27,16 @@ namespace EF_TemelCrudIslemleri
         private void KategorileriGetir()
         {
             NorthwindsabahEntities db = new NorthwindsabahEntities();
-            cmbKategori.DataSource = db.Categories.OrderBy(x => x.CategoryName).ToList();
-            cmbKategori.DisplayMember = "CategoryName";
-            cmbKategori.ValueMember = "CategoryID";
+            cmbKategori.DataSource = db.Categories
+                .OrderBy(x => x.CategoryName)
+                .Select(x => new CategoryViewModel() {
+                    CategoryID = x.CategoryID,
+                    CategoryName = x.CategoryName,
+                    ProductCount = x.Products.Count
+                })
+                .ToList();
+            //cmbKategori.DisplayMember = "CategoryName";
+            //cmbKategori.ValueMember = "CategoryID";    tostringi ezince gerek kalmadı
         }
 
         private void btnKategoriKaydet_Click(object sender, EventArgs e)
@@ -62,6 +70,32 @@ namespace EF_TemelCrudIslemleri
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void cmbKategori_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbKategori.SelectedItem == null) return;
+            CategoryViewModel cat = cmbKategori.SelectedItem as CategoryViewModel;
+            NorthwindsabahEntities db = new NorthwindsabahEntities();
+
+            //lstUrunler.DataSource = db.Products
+            //    .Where(x => x.CategoryID == cat.CategoryID)
+            //    .OrderBy(x => x.ProductName)
+            //    .ToList(); ya da 
+            //lstUrunler.DisplayMember = "ProductName";
+
+            lstUrunler.DataSource = db.Categories
+                .First(x => x.CategoryID == cat.CategoryID)
+                .Products
+                .Select(x=> new ProductViewModel() {
+                    ProductID=x.ProductID,
+                    ProductName=x.ProductName,
+                    UnitPrice=x.UnitPrice
+                })
+                .OrderBy(x=>x.ProductName)
+                .ToList();        // first yerine Where(x => x.CategoryID == cat.CategoryID).First() yazılabilir.
+
+            
         }
     }
 }

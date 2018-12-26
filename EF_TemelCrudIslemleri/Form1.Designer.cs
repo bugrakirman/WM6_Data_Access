@@ -34,6 +34,7 @@
             this.txtAciklama = new System.Windows.Forms.RichTextBox();
             this.btnKategoriKaydet = new System.Windows.Forms.Button();
             this.ep1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.lstUrunler = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.ep1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,6 +45,7 @@
             this.cmbKategori.Name = "cmbKategori";
             this.cmbKategori.Size = new System.Drawing.Size(121, 21);
             this.cmbKategori.TabIndex = 0;
+            this.cmbKategori.SelectedIndexChanged += new System.EventHandler(this.cmbKategori_SelectedIndexChanged);
             // 
             // txtKategoriAdi
             // 
@@ -74,11 +76,20 @@
             // 
             this.ep1.ContainerControl = this;
             // 
+            // lstUrunler
+            // 
+            this.lstUrunler.FormattingEnabled = true;
+            this.lstUrunler.Location = new System.Drawing.Point(139, 12);
+            this.lstUrunler.Name = "lstUrunler";
+            this.lstUrunler.Size = new System.Drawing.Size(263, 173);
+            this.lstUrunler.TabIndex = 4;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lstUrunler);
             this.Controls.Add(this.btnKategoriKaydet);
             this.Controls.Add(this.txtAciklama);
             this.Controls.Add(this.txtKategoriAdi);
@@ -99,6 +110,7 @@
         private System.Windows.Forms.RichTextBox txtAciklama;
         private System.Windows.Forms.Button btnKategoriKaydet;
         private System.Windows.Forms.ErrorProvider ep1;
+        private System.Windows.Forms.ListBox lstUrunler;
     }
 }
 
