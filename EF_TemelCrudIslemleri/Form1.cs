@@ -140,6 +140,7 @@ namespace EF_TemelCrudIslemleri
         {
             try
             {
+                ep1.Clear();
                 NorthwindsabahEntities db = new NorthwindsabahEntities();
                 var seciliUrun = lstUrunler.SelectedItem as ProductViewModel;
                 var urun = db.Products.Find(seciliUrun.ProductID); // referans tipindeki urunun propertylerini değiştirip savechange ile değişiklikleri sql e aktarıyor
@@ -156,8 +157,8 @@ namespace EF_TemelCrudIslemleri
                 {
                     foreach (var error in validationError.ValidationErrors)
                     {
-                        if (error.PropertyName == "CategoryName")
-                            ep1.SetError(txtKategoriAdi, error.ErrorMessage);
+                        if (error.PropertyName == "ProductName")
+                            ep1.SetError(txtUrunAdi, error.ErrorMessage);
 
                         MessageBox.Show(EntityHelper.ValidationMessage(ex), "Bir hata olustu", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
