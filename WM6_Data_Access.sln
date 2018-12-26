@@ -5,6 +5,12 @@ VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFDBFirst", "EFDBFirst\EFDBFirst.csproj", "{2154DF87-A53F-47B6-9CB3-E24EE8D430C7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.Gün", "2.Gün", "{6CBA433F-7C1A-4589-9ACB-661D2745B5D7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1. Gün", "1. Gün", "{535FED2B-790D-4D0B-B3C4-5B182CA1B3A2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EF_TemelCrudIslemleri", "EF_TemelCrudIslemleri\EF_TemelCrudIslemleri.csproj", "{6393BAEB-B87A-48D4-9D8F-5A698A1084F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,9 +21,17 @@ Global
 		{2154DF87-A53F-47B6-9CB3-E24EE8D430C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2154DF87-A53F-47B6-9CB3-E24EE8D430C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2154DF87-A53F-47B6-9CB3-E24EE8D430C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6393BAEB-B87A-48D4-9D8F-5A698A1084F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6393BAEB-B87A-48D4-9D8F-5A698A1084F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6393BAEB-B87A-48D4-9D8F-5A698A1084F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6393BAEB-B87A-48D4-9D8F-5A698A1084F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2154DF87-A53F-47B6-9CB3-E24EE8D430C7} = {535FED2B-790D-4D0B-B3C4-5B182CA1B3A2}
+		{6393BAEB-B87A-48D4-9D8F-5A698A1084F5} = {6CBA433F-7C1A-4589-9ACB-661D2745B5D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3EDD6F57-1C10-4BD1-A3E1-0BA64002F533}
