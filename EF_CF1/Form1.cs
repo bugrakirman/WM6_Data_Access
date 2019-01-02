@@ -21,6 +21,7 @@ namespace EF_CF1
         {
             MyContext db = new MyContext();
             this.Text = db.Kategoriler.Count()+" adet kategori bulunuyor";
+            
         }
     }
 }
